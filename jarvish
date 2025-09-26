@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use App\Command\MakeControllerCommand;
+use App\Command\MakeMigrationCommand;
+use App\Command\MigrateCommand;
+
+$application = new Application('JarvishStack', '1.0.0');
+
+$application->add(new MakeControllerCommand());
+$application->add(new MakeMigrationCommand());
+$application->add(new MigrateCommand());
+
+$application->run();

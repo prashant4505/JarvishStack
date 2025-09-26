@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}JarvishStack Framework{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Welcome to JarvishStack</h1>
+        <p class="lead text-muted">A lightweight PHP framework built with Symfony components, Twig templating, and a modular structure for fast development.</p>
+        <a href="/docs" class="btn btn-primary btn-lg mt-3">Get Started</a>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row text-center mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">MVC Architecture</h5>
+                    <p class="card-text">Separate your Models, Views, and Controllers for clean and maintainable code.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Routing System</h5>
+                    <p class="card-text">Define routes easily using a central routes file and link them with controllers.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Twig Templating</h5>
+                    <p class="card-text">Render beautiful, reusable templates with a modern Twig integration.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Commands Section -->
+    <div class="mb-5">
+        <h2 class="text-center mb-4">JarvishStack CLI Commands</h2>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="p-3 border rounded bg-light">
+                    <h5>Make Controller</h5>
+                    <p>Create a new controller, route, and template in seconds:</p>
+                    <code>./jarvish jarvish:make:controller</code>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="p-3 border rounded bg-light">
+                    <h5>Make Migration</h5>
+                    <p>Generate migration files and manage database schema:</p>
+                    <code>./jarvish jarvish:make:migration</code>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="p-3 border rounded bg-light">
+                    <h5>Run Migrations</h5>
+                    <p>Execute migrations and create tables in the database:</p>
+                    <code>./jarvish jarvish:migrate</code>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="p-3 border rounded bg-light">
+                    <h5>Other Commands</h5>
+                    <p>Future commands for scaffolding and framework utilities.</p>
+                    <code>./jarvish list</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="text-center mb-5">
+        <h2>Why JarvishStack?</h2>
+        <p class="lead text-muted">
+            JarvishStack is designed for developers who want a lightweight, modular PHP framework without the bloat. 
+            Easily extendable, organized, and optimized for rapid development.
+        </p>
+    </div>
+
+    <!-- Footer Callout -->
+    <div class="text-center py-4 bg-dark text-white rounded">
+        <h5>Ready to start building with JarvishStack?</h5>
+        <a href="/contact" class="btn btn-outline-light mt-2">Contact Us / Try Demo</a>
+    </div>
+</div>
+{% endblock %}

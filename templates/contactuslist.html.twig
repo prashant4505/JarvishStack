@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact Submissions{% endblock %}
+
+{% block body %}
+<h1>Contact Submissions</h1>
+
+{% if contacts is empty %}
+    <p>No contact submissions found.</p>
+{% else %}
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Submitted At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.subject }}</td>
+                    <td>{{ contact.created_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

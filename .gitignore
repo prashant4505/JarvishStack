@@ -1,0 +1,26 @@
+# Composer dependencies
+/vendor/
+/composer.lock
+
+# Environment variables
+/.env
+
+# Logs and cache
+/var/logs/
+/var/cache/
+/tmp/
+
+# IDE / Editor files
+*.idea/
+*.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# JarvishStack-specific
+/public/uploads/
+

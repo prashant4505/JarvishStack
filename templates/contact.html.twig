@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+<h1>Contact Form</h1>
+
+{% if message %}
+    <div class="alert {{ message starts with 'Email sent' ? 'alert-success' : 'alert-danger' }}">
+        {{ message }}
+    </div>
+{% endif %}
+
+<form method="post" action="/contact">
+    <div class="mb-3">
+        <label for="email" class="form-label">To Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="recipient@example.com" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="subject" class="form-label">Subject</label>
+        <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="message" class="form-label">Message</label>
+        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Send Email</button>
+</form>
+{% endblock %}

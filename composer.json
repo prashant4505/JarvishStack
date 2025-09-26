@@ -1,0 +1,23 @@
+{
+    "name": "prashantsingh/jarvishstack",
+    "description": "JarvishStack: Lightweight PHP Framework with MVC, Routing, Twig & CLI",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Prashant Singh",
+            "email": "prashant.s@svinfotech.net"
+        }
+    ],
+    "require": {
+        "symfony/symfony": "^7.3",
+        "symfony/dotenv": "^7.3",
+        "symfony/routing": "^7.3",
+        "symfony/http-foundation": "^7.3",
+        "twig/twig": "^3.21",
+        "phpmailer/phpmailer": "^6.10"
+    }
+}

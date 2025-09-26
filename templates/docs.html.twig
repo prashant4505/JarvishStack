@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}JarvishStack Documentation{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="mb-4 text-center">JarvishStack Framework Documentation</h1>
+
+    <section class="mb-5">
+        <h2>1. Git Setup</h2>
+        <p>Clone the repository and install dependencies:</p>
+        <pre><code>git clone &lt;repository-url&gt;
+cd JarvishStack
+composer install</code></pre>
+    </section>
+
+    <section class="mb-5">
+        <h2>2. Environment Setup</h2>
+        <p>Create a <code>.env</code> file in the root directory with the following keys:</p>
+        <pre><code>DB_HOST=database
+DB_NAME=jarvishstack
+DB_USER=lamp
+DB_PASS=lamp
+
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your_email@example.com
+SMTP_PASS=your_smtp_password
+SMTP_FROM=your_email@example.com</code></pre>
+    </section>
+
+    <section class="mb-5">
+        <h2>3. Local Development</h2>
+        <p>Use PHP built-in server or Lando:</p>
+        <pre><code>php -S localhost:8000 -t public</code></pre>
+        <p>Optional Lando config:</p>
+        <pre><code>lando start</code></pre>
+    </section>
+
+    <section class="mb-5">
+        <h2>4. Database Migrations</h2>
+        <p>Run migrations to create all necessary tables, including <code>contact_us</code>:</p>
+        <pre><code>php jarvish jarvish:migrate</code></pre>
+        <p>Migrations are stored in <code>src/Migrations/</code> and can be extended for future tables.</p>
+    </section>
+
+    <section class="mb-5">
+        <h2>5. CLI Commands</h2>
+        <ul>
+            <li><code>./jarvish jarvish:make:controller</code> - Create a new controller, twig template, and route.</li>
+            <li><code>./jarvish jarvish:make:migration</code> - Create a new migration file for database table.</li>
+            <li><code>./jarvish jarvish:migrate</code> - Run all migrations.</li>
+            <li><code>./jarvish list</code> - List all available CLI commands.</li>
+        </ul>
+    </section>
+
+    <section class="mb-5">
+        <h2>6. Default Routes</h2>
+        <ul>
+            <li><code>/</code> - Home page</li>
+            <li><code>/contact</code> - Contact form (stores in <code>contact_us</code> table)</li>
+            <li><code>/users</code> - Users listing</li>
+            <li><code>/docs</code> - Documentation page</li>
+        </ul>
+    </section>
+
+    <section class="mb-5">
+        <h2>7. Creating Controllers</h2>
+        <p>Example:</p>
+        <pre><code>./jarvish jarvish:make:controller
+# Enter Controller name: HelloController
+# Enter route path: /hello</code></pre>
+        <p>This generates the controller file, twig template, and automatically adds a route.</p>
+    </section>
+
+    <section class="mb-5">
+        <h2>8. Sending Emails</h2>
+        <p>The contact form uses SMTP configured in <code>.env</code> to send emails and store submissions in the database.</p>
+    </section>
+
+    <section class="mb-5">
+        <h2>9. Templates</h2>
+        <ul>
+            <li><code>base.html.twig</code> - Base layout with navbar, footer, Bootstrap 5 included</li>
+            <li><code>home.html.twig</code> - Home page template</li>
+            <li><code>contact.html.twig</code> - Contact form</li>
+            <li><code>contactuslist.html.twig</code> - Contact form submissions listing</li>
+            <li><code>docs.html.twig</code> - Documentation page</li>
+        </ul>
+    </section>
+
+    <section class="mb-5">
+        <h2>10. Extending the Framework</h2>
+        <ul>
+            <li>Add new migrations in <code>src/Migrations/</code></li>
+            <li>Add new models in <code>src/Model/</code></li>
+            <li>Add new services in <code>src/Service/</code></li>
+            <li>Create new controllers via CLI to keep routing and twig connected automatically</li>
+        </ul>
+    </section>
+
+    <footer class="text-center mt-5 py-3 border-top">
+        <p>&copy; {{ "now"|date("Y") }} JarvishStack Framework</p>
+    </footer>
+</div>
+{% endblock %}
