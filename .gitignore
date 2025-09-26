@@ -2,9 +2,6 @@
 /vendor/
 /composer.lock
 
-# Environment variables
-/.env
-
 # Logs and cache
 /var/logs/
 /var/cache/
