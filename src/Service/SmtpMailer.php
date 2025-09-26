@@ -12,13 +12,13 @@ class SmtpMailer
     {
         $mail = new PHPMailer(true);
         $mail->isSMTP();
-        $mail->Host       = $_ENV['SMTP_HOST'];
+        $mail->Host       = $_ENV['SMTP_HOST'] ?? '';
         $mail->SMTPAuth   = true;
-        $mail->Username   = $_ENV['SMTP_USER'];
-        $mail->Password   = $_ENV['SMTP_PASS'];
+        $mail->Username   = $_ENV['SMTP_USER'] ?? '';
+        $mail->Password   = $_ENV['SMTP_PASS'] ?? '';
         $mail->SMTPSecure = $_ENV['SMTP_SECURE'] === 'ssl' ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = (int)$_ENV['SMTP_PORT'];
-        $mail->setFrom($_ENV['SMTP_FROM'], 'MyApp');
+        $mail->setFrom($_ENV['SMTP_FROM'], 'JarvishStack');
 
         $this->mailer = $mail;
     }
@@ -38,3 +38,4 @@ class SmtpMailer
         }
     }
 }
+
