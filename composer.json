@@ -1,6 +1,11 @@
 {
     "name": "prashantsingh/jarvishstack",
-    "description": "JarvishStack: Lightweight PHP Framework with MVC, Routing, Twig & CLI",
+    "type": "project",
+    "description": "JarvishStack: Lightweight PHP MVC framework built on Symfony components and Twig",
+    "license": "MIT",
+    "keywords": ["php", "framework", "mvc", "twig", "symfony-components", "cli"],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "App\\": "src/"
@@ -13,6 +18,7 @@
         }
     ],
     "require": {
+        "php": ">=8.2",
         "symfony/symfony": "^7.3",
         "symfony/dotenv": "^7.3",
         "symfony/routing": "^7.3",

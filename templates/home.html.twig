@@ -1,92 +1,167 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}JarvishStack Framework{% endblock %}
+{% block title %}JarvishStack — Lightweight PHP MVC Framework{% endblock %}
+{% block description %}JarvishStack: Lightweight PHP framework with MVC, Symfony routing, Twig templating, and CLI scaffolding.{% endblock %}
 
 {% block body %}
-<div class="container py-5">
-    <!-- Hero Section -->
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold">Welcome to JarvishStack</h1>
-        <p class="lead text-muted">A lightweight PHP framework built with Symfony components, Twig templating, and a modular structure for fast development.</p>
-        <a href="/docs" class="btn btn-primary btn-lg mt-3">Get Started</a>
-    </div>
 
-    <!-- Features Section -->
-    <div class="row text-center mb-5">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">MVC Architecture</h5>
-                    <p class="card-text">Separate your Models, Views, and Controllers for clean and maintainable code.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Routing System</h5>
-                    <p class="card-text">Define routes easily using a central routes file and link them with controllers.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Twig Templating</h5>
-                    <p class="card-text">Render beautiful, reusable templates with a modern Twig integration.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Commands Section -->
-    <div class="mb-5">
-        <h2 class="text-center mb-4">JarvishStack CLI Commands</h2>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="p-3 border rounded bg-light">
-                    <h5>Make Controller</h5>
-                    <p>Create a new controller, route, and template in seconds:</p>
-                    <code>./jarvish jarvish:make:controller</code>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="p-3 border rounded bg-light">
-                    <h5>Make Migration</h5>
-                    <p>Generate migration files and manage database schema:</p>
-                    <code>./jarvish jarvish:make:migration</code>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="p-3 border rounded bg-light">
-                    <h5>Run Migrations</h5>
-                    <p>Execute migrations and create tables in the database:</p>
-                    <code>./jarvish jarvish:migrate</code>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="p-3 border rounded bg-light">
-                    <h5>Other Commands</h5>
-                    <p>Future commands for scaffolding and framework utilities.</p>
-                    <code>./jarvish list</code>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- About Section -->
-    <div class="text-center mb-5">
-        <h2>Why JarvishStack?</h2>
-        <p class="lead text-muted">
-            JarvishStack is designed for developers who want a lightweight, modular PHP framework without the bloat. 
-            Easily extendable, organized, and optimized for rapid development.
+{# ── Hero ─────────────────────────────────────────────────────── #}
+<section class="hero">
+    <div class="container hero-inner">
+        <div class="hero-badge">⚡ PHP 8.2 · Symfony Components · Twig · PHPMailer</div>
+        <h1 class="hero-title">
+            Build PHP apps<br>
+            <span class="gradient-text">fast and clean</span>
+        </h1>
+        <p class="hero-subtitle">
+            JarvishStack is a lightweight MVC framework with Symfony routing,
+            Twig templating, database migrations, and one-command CLI scaffolding —
+            without the overhead of a full-stack framework.
         </p>
+        <div class="hero-actions">
+            <a href="/docs"    class="btn btn-primary btn-lg">Get Started →</a>
+            <a href="/contact" class="btn btn-ghost   btn-lg">Try the Demo</a>
+        </div>
+        <hr class="hero-divider">
+        <div class="hero-stats">
+            <div>
+                <span class="hero-stat-value">MVC</span>
+                <span class="hero-stat-label">Architecture</span>
+            </div>
+            <div>
+                <span class="hero-stat-value">CLI</span>
+                <span class="hero-stat-label">Scaffolding</span>
+            </div>
+            <div>
+                <span class="hero-stat-value">Twig</span>
+                <span class="hero-stat-label">Templating</span>
+            </div>
+            <div>
+                <span class="hero-stat-value">PHP 8.2</span>
+                <span class="hero-stat-label">Minimum</span>
+            </div>
+        </div>
     </div>
+</section>
 
-    <!-- Footer Callout -->
-    <div class="text-center py-4 bg-dark text-white rounded">
-        <h5>Ready to start building with JarvishStack?</h5>
-        <a href="/contact" class="btn btn-outline-light mt-2">Contact Us / Try Demo</a>
+{# ── Features ─────────────────────────────────────────────────── #}
+<section class="page-section">
+    <div class="container">
+        <div class="section-wrap">
+            <span class="section-eyebrow">Core Features</span>
+            <h2 class="section-title">Everything you need to build</h2>
+            <p class="section-subtitle">Modern, opinionated defaults — focus on your application, not the plumbing.</p>
+        </div>
+
+        <div class="grid g-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="feature-icon fi-indigo">🏗️</div>
+                    <h3 class="card-title">MVC Architecture</h3>
+                    <p class="card-text">Controllers, Models, and Twig Views cleanly separated. Every controller extends <code>AbstractController</code> — no boilerplate.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="feature-icon fi-sky">🛣️</div>
+                    <h3 class="card-title">Symfony Routing</h3>
+                    <p class="card-text">Powered by Symfony's battle-tested routing component with HTTP method constraints and named routes.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="feature-icon fi-emerald">🎨</div>
+                    <h3 class="card-title">Twig Templating</h3>
+                    <p class="card-text">Layout inheritance, blocks, and a built-in <code>asset()</code> helper with automatic cache-busting via file mtime.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="feature-icon fi-orange">⚡</div>
+                    <h3 class="card-title">CLI Scaffolding</h3>
+                    <p class="card-text">One command generates a controller, template, and route. Powered by Symfony Console — fast, interactive, reliable.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="feature-icon fi-rose">🗄️</div>
+                    <h3 class="card-title">Migration Tracking</h3>
+                    <p class="card-text">Schema migrations with full execution history. Re-run <code>jarvish:migrate</code> safely — already-executed migrations are skipped.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="feature-icon fi-violet">✉️</div>
+                    <h3 class="card-title">SMTP Email</h3>
+                    <p class="card-text">PHPMailer integration baked in. Configure credentials in <code>.env</code> and send transactional email from any controller.</p>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
+
+{# ── CLI Demo ─────────────────────────────────────────────────── #}
+<section class="page-section" style="padding-top:0">
+    <div class="container">
+        <div class="section-wrap">
+            <span class="section-eyebrow">Developer Experience</span>
+            <h2 class="section-title">Scaffold anything in seconds</h2>
+        </div>
+
+        <div class="grid g-2">
+            <div class="terminal">
+                <div class="terminal-bar">
+                    <div class="t-dot t-dot-red"></div>
+                    <div class="t-dot t-dot-yellow"></div>
+                    <div class="t-dot t-dot-green"></div>
+                    <span class="terminal-title">make:controller</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> ./jarvish jarvish:make:controller</span></div>
+                    <div class="t-muted">  Controller name: BlogController</div>
+                    <div class="t-muted">  Route path: /blog</div>
+                    <div>&nbsp;</div>
+                    <div class="t-ok">  ✔ Controller created:  src/Controller/BlogController.php</div>
+                    <div class="t-ok">  ✔ Template created:    templates/blog.html.twig</div>
+                    <div class="t-ok">  ✔ Route registered:    /blog → BlogController::index</div>
+                </div>
+            </div>
+            <div class="terminal">
+                <div class="terminal-bar">
+                    <div class="t-dot t-dot-red"></div>
+                    <div class="t-dot t-dot-yellow"></div>
+                    <div class="t-dot t-dot-green"></div>
+                    <span class="terminal-title">make:migration + migrate</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> ./jarvish jarvish:make:migration</span></div>
+                    <div class="t-muted">  Table name: posts</div>
+                    <div class="t-ok">  ✔ Migration created: CreatePostsTable.php</div>
+                    <div>&nbsp;</div>
+                    <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> ./jarvish jarvish:migrate</span></div>
+                    <div class="t-info">  Connected to database.</div>
+                    <div class="t-ok">  Migrated: CreatePostsTable</div>
+                    <div class="t-ok">  1 migration(s) completed successfully.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── CTA ──────────────────────────────────────────────────────── #}
+<section class="page-section" style="padding-top:0;padding-bottom:4rem">
+    <div class="container">
+        <div class="cta-banner">
+            <div class="cta-banner-inner">
+                <h2>Ready to start building?</h2>
+                <p>Clone the repo, run <code style="background:rgba(165,180,252,.15);color:#a5b4fc">composer install</code>, and you're live in under two minutes.</p>
+                <div style="display:flex;gap:.875rem;justify-content:center;flex-wrap:wrap">
+                    <a href="/docs"    class="btn btn-primary btn-lg">Read the Docs →</a>
+                    <a href="/contact" class="btn btn-ghost   btn-lg">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

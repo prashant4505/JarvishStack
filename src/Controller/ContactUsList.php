@@ -5,27 +5,21 @@ use App\Database\Connection;
 use App\Model\Contact;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
-class ContactUsList
+class ContactUsList extends AbstractController
 {
-    private Environment $twig;
     private Contact $contactModel;
 
-    public function __construct(Environment $twig)
+    public function __construct(\Twig\Environment $twig)
     {
-        $this->twig = $twig;
-        $conn = Connection::get();
-        $this->contactModel = new Contact($conn);
+        parent::__construct($twig);
+        $this->contactModel = new Contact(Connection::get());
     }
 
     public function index(Request $request): Response
     {
-        $contact = $this->contactModel->getAll(20);
-        $html = $this->twig->render('contactuslist.html.twig', [
-            'message' => 'Contact Us List',
-            'contacts' => $contact
+        return $this->render('contactuslist.html.twig', [
+            'contacts' => $this->contactModel->getAll(50),
         ]);
-        return new Response($html);
     }
 }

@@ -3,22 +3,13 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
-class HomeController
+class HomeController extends AbstractController
 {
-    private Environment $twig;
-
-    public function __construct(Environment $twig)
-    {
-        $this->twig = $twig;
-    }
-
     public function index(Request $request): Response
     {
-        $html = $this->twig->render('home.html.twig', [
-            'message' => '🎉 Welcome to JarvishStack!'
+        return $this->render('home.html.twig', [
+            'message' => 'Welcome to JarvishStack!',
         ]);
-        return new Response($html);
     }
 }

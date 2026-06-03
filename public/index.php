@@ -1,43 +1,55 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__.'/../global.php';
+require_once __DIR__ . '/../global.php';
 
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-// ----------------------
-// Load environment variables
-// ----------------------
-$dotenv = new Dotenv();
-$dotenv->loadEnv(__DIR__ . '/../.env');
+// Load environment
+(new Dotenv())->loadEnv(__DIR__ . '/../.env');
 
-// ----------------------
+$isDev = ($_ENV['APP_ENV'] ?? 'prod') === 'dev';
+
 // Twig setup
-// ----------------------
 $loader = new FilesystemLoader(__DIR__ . '/../templates');
-$twig = new Environment($loader);
+$twig   = new Environment($loader, [
+    'debug' => $isDev,
+    'cache' => $isDev ? false : __DIR__ . '/../var/cache/twig',
+]);
 
-// Add asset() function for CSS/JS
-$twig->addFunction(new \Twig\TwigFunction('asset', function ($path) {
-    $fullPath = __DIR__ . '/../public/' . ltrim($path, '/');
-    $version = file_exists($fullPath) ? filemtime($fullPath) : time();
+if ($isDev) {
+    $twig->addExtension(new \Twig\Extension\DebugExtension());
+}
+
+// asset() helper: appends ?v=<mtime> for cache-busting
+$twig->addFunction(new \Twig\TwigFunction('asset', function (string $path): string {
+    $fullPath = __DIR__ . '/' . ltrim($path, '/');
+    $version  = file_exists($fullPath) ? filemtime($fullPath) : time();
     return '/' . ltrim($path, '/') . '?v=' . $version;
 }));
 
-// ----------------------
+// Check which tables exist so templates can hide nav links before migrations run
+$tablesReady = ['users' => false, 'contacts' => false];
+try {
+    $conn = App\Database\Connection::get();
+    $tablesReady['users']    = (bool) $conn->query("SHOW TABLES LIKE 'users'")->num_rows;
+    $tablesReady['contacts'] = (bool) $conn->query("SHOW TABLES LIKE 'contact_us'")->num_rows;
+} catch (\Throwable) {
+    // DB unavailable — both flags stay false, links stay hidden
+}
+$twig->addGlobal('tablesReady', $tablesReady);
+
 // Load routes
-// ----------------------
 $routes = require __DIR__ . '/../src/routes.php';
 
-// ----------------------
-// Handle Request
-// ----------------------
+// Handle request
 $request = Request::createFromGlobals();
 $context = new RequestContext();
 $context->fromRequest($request);
@@ -47,29 +59,27 @@ try {
     $parameters = $matcher->match($request->getPathInfo());
     [$class, $method] = explode('::', $parameters['_controller']);
 
-    // Controller must accept Twig as constructor dependency
     $controller = new $class($twig);
+    $response   = call_user_func([$controller, $method], $request);
 
-    // Call controller method
-    $response = call_user_func_array([$controller, $method], [$request]);
+} catch (ResourceNotFoundException) {
+    $body     = file_exists(__DIR__ . '/../templates/errors/404.html.twig')
+        ? $twig->render('errors/404.html.twig')
+        : '<h1>404 Not Found</h1>';
+    $response = new Response($body, 404);
 
-} catch (ResourceNotFoundException $e) {
-    // Render 404 page if exists, otherwise plain text
-    $template404 = __DIR__ . '/../templates/errors/404.html.twig';
-    if (file_exists($template404)) {
-        $response = new Response($twig->render('errors/404.html.twig'), 404);
-    } else {
-        $response = new Response("404 Not Found", 404);
-    }
-} catch (\Exception $e) {
-    // Render 500 page if exists, otherwise plain text
-    $template500 = __DIR__ . '/../templates/errors/500.html.twig';
-    if (file_exists($template500)) {
-        $response = new Response($twig->render('errors/500.html.twig', ['message' => $e->getMessage()]), 500);
-    } else {
-        $response = new Response("An error occurred: " . $e->getMessage(), 500);
-    }
+} catch (MethodNotAllowedException) {
+    $body     = file_exists(__DIR__ . '/../templates/errors/404.html.twig')
+        ? $twig->render('errors/404.html.twig')
+        : '<h1>405 Method Not Allowed</h1>';
+    $response = new Response($body, 405);
+
+} catch (\Throwable $e) {
+    $message  = $isDev ? $e->getMessage() : 'An unexpected error occurred. Please try again later.';
+    $body     = file_exists(__DIR__ . '/../templates/errors/500.html.twig')
+        ? $twig->render('errors/500.html.twig', ['message' => $message])
+        : '<h1>500 Internal Server Error</h1>';
+    $response = new Response($body, 500);
 }
 
-// Send the HTTP response
 $response->send();

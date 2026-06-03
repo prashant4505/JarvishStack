@@ -1,59 +1,66 @@
 <?php
 namespace App\Controller;
 
+use App\Database\Connection;
+use App\Model\Contact;
+use App\Service\SmtpMailer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
-use App\Service\SmtpMailer;
-use App\Model\Contact; // Model to interact with contact_us table
-use App\Database\Connection;
 
-class MailController
+class MailController extends AbstractController
 {
-    private Environment $twig;
     private SmtpMailer $mailer;
     private Contact $contactModel;
 
-    public function __construct(Environment $twig)
+    public function __construct(\Twig\Environment $twig)
     {
-        $this->twig = $twig;
+        parent::__construct($twig);
         $this->mailer = new SmtpMailer();
-
-        // Initialize contact model with database connection
-        $conn = Connection::get();
-        $this->contactModel = new Contact($conn);
+        $this->contactModel = new Contact(Connection::get());
     }
 
-    // Show the form
     public function contactForm(Request $request): Response
     {
         $message = null;
+        $csrfToken = $this->generateCsrfToken('contact_form');
 
         if ($request->getMethod() === 'POST') {
-            $to = $request->request->get('email');
-            $subject = $request->request->get('subject');
-            $body = $request->request->get('message');
+            $submittedToken = $request->request->get('_token', '');
 
-            if ($to && $subject && $body) {
-                // Send email
-                $success = $this->mailer->send($to, $subject, nl2br(htmlspecialchars($body)));
-
-                // Store in database
-                $this->contactModel->create([
-                    'email' => $to,
-                    'subject' => $subject,
-                    'message' => $body
-                ]);
-
-                $message = $success ? 'Email sent successfully!' : 'Failed to send email, but stored in DB.';
+            if (!$this->validateCsrfToken('contact_form', $submittedToken)) {
+                $message = 'Invalid request. Please try again.';
             } else {
-                $message = 'Please fill in all fields.';
+                $to      = trim($request->request->get('email', ''));
+                $subject = trim($request->request->get('subject', ''));
+                $body    = trim($request->request->get('message', ''));
+
+                if (!$to || !$subject || !$body) {
+                    $message = 'Please fill in all fields.';
+                } elseif (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
+                    $message = 'Please enter a valid email address.';
+                } else {
+                    $this->contactModel->create([
+                        'email'   => $to,
+                        'subject' => $subject,
+                        'message' => $body,
+                    ]);
+
+                    $sent = $this->mailer->send(
+                        $to,
+                        $subject,
+                        nl2br(htmlspecialchars($body, ENT_QUOTES, 'UTF-8'))
+                    );
+
+                    $message = $sent
+                        ? 'Your message has been sent successfully!'
+                        : 'Message saved, but email delivery failed. We will follow up shortly.';
+                }
             }
         }
 
-        $html = $this->twig->render('contact.html.twig', [
-            'message' => $message
+        return $this->render('contact.html.twig', [
+            'message'    => $message,
+            'csrf_token' => $csrfToken,
         ]);
-        return new Response($html);
     }
 }

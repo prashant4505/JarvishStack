@@ -1,20 +1,15 @@
 <?php
 namespace App\Model;
 
-use mysqli;
-
-class User
+class User extends AbstractModel
 {
-    private mysqli $conn;
-
-    public function __construct(mysqli $conn)
-    {
-        $this->conn = $conn;
-    }
-
     public function getAll(int $limit = 20): array
     {
-        $result = $this->conn->query("SELECT name, email FROM users LIMIT $limit");
+        $stmt = $this->conn->prepare("SELECT name, email FROM users LIMIT ?");
+        $stmt->bind_param("i", $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
@@ -24,6 +19,7 @@ class User
         $stmt->bind_param("s", $name);
         $stmt->execute();
         $result = $stmt->get_result();
+        $stmt->close();
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 }

@@ -1,106 +1,136 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}JarvishStack Documentation{% endblock %}
+{% block title %}Documentation — JarvishStack{% endblock %}
 
 {% block body %}
-<div class="container my-5">
-    <h1 class="mb-4 text-center">JarvishStack Framework Documentation</h1>
+<div class="container">
+<div class="docs-layout">
 
-    <section class="mb-5">
-        <h2>1. Git Setup</h2>
-        <p>Clone the repository and install dependencies:</p>
-        <pre><code>git clone &lt;repository-url&gt;
+    {# ── Sidebar ─────────────────────────────────────────────── #}
+    <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">On this page</p>
+        <nav class="docs-nav">
+            <a href="#install">📦 Installation</a>
+            <a href="#env">🔑 Environment</a>
+            <a href="#server">🚀 Local Server</a>
+            <a href="#migrate">🗄️ Migrations</a>
+            <a href="#cli">⚡ CLI Commands</a>
+            <a href="#routes">🛣️ Default Routes</a>
+            <a href="#controllers">🏗️ Controllers</a>
+            <a href="#architecture">📐 Architecture</a>
+            <a href="#email">✉️ Email</a>
+        </nav>
+    </aside>
+
+    {# ── Content ─────────────────────────────────────────────── #}
+    <div class="docs-content">
+
+        <div style="margin-bottom:2.5rem">
+            <h1 style="font-size:2rem;margin-bottom:.375rem">JarvishStack Docs</h1>
+            <p>A lightweight PHP MVC framework built on Symfony components and Twig.</p>
+        </div>
+
+        <section id="install">
+            <h2>📦 Installation</h2>
+            <p>Clone the repository and install dependencies:</p>
+            <pre><code>git clone https://github.com/prashantj4505/JarvishStack.git
 cd JarvishStack
 composer install</code></pre>
-    </section>
+        </section>
 
-    <section class="mb-5">
-        <h2>2. Environment Setup</h2>
-        <p>Create a <code>.env</code> file in the root directory with the following keys:</p>
-        <pre><code>DB_HOST=database
+        <section id="env">
+            <h2>🔑 Environment Setup</h2>
+            <p>Copy <code>.env.example</code> to <code>.env</code> and fill in your values:</p>
+            <pre><code>APP_ENV=dev          # dev = debug mode, prod = caching + hidden errors
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=
 DB_NAME=jarvishstack
-DB_USER=lamp
-DB_PASS=lamp
 
-SMTP_HOST=smtp.example.com
+SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your_email@example.com
 SMTP_PASS=your_smtp_password
-SMTP_FROM=your_email@example.com</code></pre>
-    </section>
+SMTP_FROM=your_email@example.com
+SMTP_SECURE=tls</code></pre>
+        </section>
 
-    <section class="mb-5">
-        <h2>3. Local Development</h2>
-        <p>Use PHP built-in server or Lando:</p>
-        <pre><code>php -S localhost:8000 -t public</code></pre>
-        <p>Optional Lando config:</p>
-        <pre><code>lando start</code></pre>
-    </section>
+        <section id="server">
+            <h2>🚀 Local Development</h2>
+            <p>PHP built-in server:</p>
+            <pre><code>php -S localhost:8000 -t public</code></pre>
+            <p>Or with Lando:</p>
+            <pre><code>lando start</code></pre>
+        </section>
 
-    <section class="mb-5">
-        <h2>4. Database Migrations</h2>
-        <p>Run migrations to create all necessary tables, including <code>contact_us</code>:</p>
-        <pre><code>php jarvish jarvish:migrate</code></pre>
-        <p>Migrations are stored in <code>src/Migrations/</code> and can be extended for future tables.</p>
-    </section>
+        <section id="migrate">
+            <h2>🗄️ Database Migrations</h2>
+            <p>Run all pending migrations (safe to re-run — already-executed migrations are tracked and skipped):</p>
+            <pre><code>./jarvish jarvish:migrate</code></pre>
+            <p>Migration files live in <code>src/Migrations/</code>. Executed migrations are recorded in the <code>migrations</code> table.</p>
+        </section>
 
-    <section class="mb-5">
-        <h2>5. CLI Commands</h2>
-        <ul>
-            <li><code>./jarvish jarvish:make:controller</code> - Create a new controller, twig template, and route.</li>
-            <li><code>./jarvish jarvish:make:migration</code> - Create a new migration file for database table.</li>
-            <li><code>./jarvish jarvish:migrate</code> - Run all migrations.</li>
-            <li><code>./jarvish list</code> - List all available CLI commands.</li>
-        </ul>
-    </section>
+        <section id="cli">
+            <h2>⚡ CLI Commands</h2>
+            <table class="docs-table">
+                <thead><tr><th>Command</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>./jarvish jarvish:make:controller</code></td><td>Scaffold controller, template, and route</td></tr>
+                    <tr><td><code>./jarvish jarvish:make:migration</code></td><td>Create a new migration file</td></tr>
+                    <tr><td><code>./jarvish jarvish:migrate</code></td><td>Run pending migrations</td></tr>
+                    <tr><td><code>./jarvish list</code></td><td>List all available commands</td></tr>
+                </tbody>
+            </table>
+        </section>
 
-    <section class="mb-5">
-        <h2>6. Default Routes</h2>
-        <ul>
-            <li><code>/</code> - Home page</li>
-            <li><code>/contact</code> - Contact form (stores in <code>contact_us</code> table)</li>
-            <li><code>/users</code> - Users listing</li>
-            <li><code>/docs</code> - Documentation page</li>
-        </ul>
-    </section>
+        <section id="routes">
+            <h2>🛣️ Default Routes</h2>
+            <table class="docs-table">
+                <thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>GET</code></td><td><code>/</code></td><td>Home page</td></tr>
+                    <tr><td><code>GET</code></td><td><code>/users</code></td><td>Users listing</td></tr>
+                    <tr><td><code>GET, POST</code></td><td><code>/contact</code></td><td>Contact form</td></tr>
+                    <tr><td><code>GET</code></td><td><code>/contacts</code></td><td>Contact submissions list</td></tr>
+                    <tr><td><code>GET</code></td><td><code>/docs</code></td><td>This page</td></tr>
+                </tbody>
+            </table>
+        </section>
 
-    <section class="mb-5">
-        <h2>7. Creating Controllers</h2>
-        <p>Example:</p>
-        <pre><code>./jarvish jarvish:make:controller
-# Enter Controller name: HelloController
-# Enter route path: /hello</code></pre>
-        <p>This generates the controller file, twig template, and automatically adds a route.</p>
-    </section>
+        <section id="controllers">
+            <h2>🏗️ Creating Controllers</h2>
+            <pre><code>./jarvish jarvish:make:controller
+# Controller name: HelloController
+# Route path:      /hello</code></pre>
+            <p>This creates:</p>
+            <ul>
+                <li><code>src/Controller/HelloController.php</code> — extends <code>AbstractController</code></li>
+                <li><code>templates/hello.html.twig</code> — extends <code>base.html.twig</code></li>
+                <li>Route entry injected into <code>src/routes.php</code></li>
+            </ul>
+        </section>
 
-    <section class="mb-5">
-        <h2>8. Sending Emails</h2>
-        <p>The contact form uses SMTP configured in <code>.env</code> to send emails and store submissions in the database.</p>
-    </section>
+        <section id="architecture">
+            <h2>📐 Architecture Overview</h2>
+            <ul>
+                <li><strong>AbstractController</strong> — provides <code>render()</code>, <code>redirect()</code>, <code>json()</code>, and CSRF token helpers.</li>
+                <li><strong>AbstractModel</strong> — provides a typed <code>$conn</code> (mysqli) property.</li>
+                <li><strong>Connection</strong> — singleton mysqli connection; loaded from <code>.env</code>.</li>
+                <li><strong>Services</strong> — live in <code>src/Service/</code> and are injected via controller constructor.</li>
+                <li><strong>Templates</strong> — all extend <code>base.html.twig</code> via Twig's block inheritance.</li>
+            </ul>
+        </section>
 
-    <section class="mb-5">
-        <h2>9. Templates</h2>
-        <ul>
-            <li><code>base.html.twig</code> - Base layout with navbar, footer, Bootstrap 5 included</li>
-            <li><code>home.html.twig</code> - Home page template</li>
-            <li><code>contact.html.twig</code> - Contact form</li>
-            <li><code>contactuslist.html.twig</code> - Contact form submissions listing</li>
-            <li><code>docs.html.twig</code> - Documentation page</li>
-        </ul>
-    </section>
+        <section id="email">
+            <h2>✉️ Sending Email</h2>
+            <p>The <code>App\Service\SmtpMailer</code> wraps PHPMailer. SMTP credentials come from <code>.env</code>. Usage inside a controller:</p>
+            <pre><code>$mailer = new SmtpMailer();
+$mailer->send('to@example.com', 'Hello', '&lt;p&gt;Body&lt;/p&gt;');</code></pre>
+            <p>Contact form submissions are also stored in the <code>contact_us</code> table regardless of email delivery status.</p>
+        </section>
 
-    <section class="mb-5">
-        <h2>10. Extending the Framework</h2>
-        <ul>
-            <li>Add new migrations in <code>src/Migrations/</code></li>
-            <li>Add new models in <code>src/Model/</code></li>
-            <li>Add new services in <code>src/Service/</code></li>
-            <li>Create new controllers via CLI to keep routing and twig connected automatically</li>
-        </ul>
-    </section>
-
-    <footer class="text-center mt-5 py-3 border-top">
-        <p>&copy; {{ "now"|date("Y") }} JarvishStack Framework</p>
-    </footer>
+    </div>
+</div>
 </div>
 {% endblock %}

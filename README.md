@@ -1,156 +1,176 @@
 # JarvishStack
 
-**JarvishStack** is a lightweight PHP framework built using Symfony components and Twig, designed to give you a simple MVC structure, routing, templating, and built-in console commands for creating controllers and database migrations.  
-It supports:
+**JarvishStack** is a lightweight PHP MVC framework built on Symfony components and Twig templating. It gives you a clean, organised structure — routing, controllers, models, templating, database migrations, and a CLI scaffolding tool — without the overhead of a full-stack framework like Laravel.
 
+**Features**
 - MVC architecture
-- Routing system
-- Twig templating
-- Console commands for creating controllers and migrations
-- Database migrations system
-- SMTP email sending via PHPMailer
-
-JarvishStack is perfect for small to medium PHP projects where you want a clean structure without full-stack frameworks like Laravel.
+- Symfony-powered routing
+- Twig templating engine
+- Database migrations with tracking
+- SMTP email via PHPMailer
+- CLI commands for scaffolding controllers and migrations
 
 ---
 
-## Prerequisites
+## Requirements
 
-- PHP **8.2** or above
-- Composer installed
-- MySQL or compatible database
-- Optional: Lando (for containerized setup)
+- PHP **8.2** or higher
+- Composer
+- MySQL / MariaDB
+- Optional: [Lando](https://lando.dev) for containerised local dev
 
 ---
 
-## Setup Steps
+## Setup
 
-### 1. Clone the Repository
+### 1. Clone and install
 
 ```bash
-git clone https://github.com/prashant4505/JarvishStack.git
+git clone https://github.com/prashantj4505/JarvishStack.git
 cd JarvishStack
-```
-
----
-
-### 2. Install PHP Dependencies
-
-```bash
 composer install
 ```
 
-This installs all required packages such as Symfony, Twig, and PHPMailer.
+### 2. Configure environment
 
----
+Copy the example and fill in your values:
 
-### 3. Configure Environment
-
-Create a `.env` file in the project root:
+```bash
+cp .env.example .env
+```
 
 ```dotenv
-# Database configuration
-DB_HOST=database
-DB_NAME=jarvishstack
-DB_USER=lamp
-DB_PASS=lamp
+APP_ENV=dev
 
-# SMTP configuration
-SMTP_HOST=smtp.example.com
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=
+DB_NAME=jarvishstack
+
+SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your_email@example.com
 SMTP_PASS=your_smtp_password
 SMTP_FROM=your_email@example.com
+SMTP_SECURE=tls
 ```
----
 
-### 4. Run Database Migrations
+Set `APP_ENV=prod` for production (enables Twig cache, hides error details).
 
-Create default tables such as `contact_us`:
+### 3. Run database migrations
 
 ```bash
 ./jarvish jarvish:migrate
 ```
 
-Future migrations can be added in `src/Migrations/` and rerun with the same command.
+Migrations are tracked so re-running this command is safe — already-executed migrations are skipped.
 
----
-
-### 5. Start the Server
-
-#### Option 1: PHP Built-in Server
+### 4. Start the development server
 
 ```bash
 php -S localhost:8000 -t public
 ```
 
-#### Option 2: Lando
+Or with Lando:
 
 ```bash
 lando start
 ```
 
-Access your application:
+---
 
-* `http://localhost:8000` (PHP server)
-* `http://php.lndo.site` (Lando)
+## Default Routes
+
+| Method | Path       | Description                        |
+|--------|------------|------------------------------------|
+| GET    | `/`        | Home page                          |
+| GET    | `/users`   | Users listing                      |
+| GET    | `/contact` | Contact form                       |
+| POST   | `/contact` | Submit contact form                |
+| GET    | `/contacts`| Contact submissions list           |
+| GET    | `/docs`    | In-app documentation               |
 
 ---
 
-### 6. Access Default Features
+## CLI Commands
 
-* **Home page**: `/`
-* **Users listing**: `/users`
-* **Contact form**: `/contact` (submissions stored in `contact_us` table)
-* **SMTP Email sending** via configured credentials
-
----
-
-### 7. Creating Controllers
-
-Generate new controllers and routes:
+### Scaffold a controller
 
 ```bash
 ./jarvish jarvish:make:controller
 ```
 
-It will ask for:
+Prompts for a controller name and route path, then generates:
+- `src/Controller/<Name>.php`
+- `templates/<name>.html.twig`
+- Route entry in `src/routes.php`
 
-* Controller name (e.g., `HelloController`)
-* Route path (e.g., `/hello`)
+**Example:**
 
-A new controller, twig template, and route entry will be automatically created.
-
----
-
-### 8. Creating Migrations
-
-Generate new migrations:
-
-```bash
-/.jarvish jarvish:make:migration
+```
+Controller name: HelloController
+Route path:      /hello
 ```
 
-It will prompt for the table name and create a migration file in `src/Migrations/`.
+### Create a migration
 
-Run all migrations:
+```bash
+./jarvish jarvish:make:migration
+```
+
+Generates a migration class in `src/Migrations/` with a basic `up()` method.
+
+### Run migrations
 
 ```bash
 ./jarvish jarvish:migrate
 ```
 
+Runs all pending migrations and records executed ones in the `migrations` table.
+
+### List all commands
+
+```bash
+./jarvish list
+```
+
 ---
 
-JarvishStack is now ready for development, and you can expand it by creating new controllers, templates, and migrations as needed.
+## Project Structure
 
 ```
-
-This includes:
-
-- **Framework description**  
-- **Prerequisites**  
-- **All setup steps from clone → install → configure → migrate → run server**  
-- **Instructions for controllers and migrations**  
-
-I can also make a **visual, nicely formatted HTML documentation page** in Twig using Bootstrap that mirrors this README if you want the in-app docs. Do you want me to do that?
+JarvishStack/
+├── public/               # Web root (entry point: index.php)
+│   ├── index.php
+│   ├── css/style.css
+│   └── js/script.js
+├── src/
+│   ├── Controller/       # HTTP controllers (extend AbstractController)
+│   ├── Model/            # Data models (extend AbstractModel)
+│   ├── Service/          # Business logic (SmtpMailer, etc.)
+│   ├── Database/         # DB connection singleton
+│   ├── Migrations/       # Migration classes
+│   ├── Command/          # CLI commands
+│   └── routes.php        # Route definitions
+├── templates/            # Twig templates
+│   └── errors/           # 404 / 500 error pages
+├── global.php            # dump() / dd() helpers
+├── jarvish               # CLI entry point
+└── .env.example          # Environment variable template
 ```
+
+---
+
+## Extending the Framework
+
+- **New controller**: `./jarvish jarvish:make:controller`
+- **New model**: Create a class in `src/Model/` extending `AbstractModel`
+- **New migration**: `./jarvish jarvish:make:migration`, then edit the generated file
+- **New service**: Create a class in `src/Service/`
+- **Twig cache** (production): Create `var/cache/twig/` directory and set `APP_ENV=prod`
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).

@@ -1,31 +1,48 @@
-{% extends "base.html.twig" %}
-{% block title %}Contact{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact — JarvishStack{% endblock %}
 
 {% block body %}
-<h1>Contact Form</h1>
+<div class="container" style="padding-top:3rem;padding-bottom:4rem">
 
-{% if message %}
-    <div class="alert {{ message starts with 'Email sent' ? 'alert-success' : 'alert-danger' }}">
-        {{ message }}
+    {% if message %}
+        <div class="alert {{ message starts with 'Your message' ? 'alert-success' : 'alert-danger' }}" style="max-width:560px;margin:0 auto 1.5rem">
+            <span class="alert-icon">{{ message starts with 'Your message' ? '✅' : '⚠️' }}</span>
+            <span>{{ message }}</span>
+            <button class="alert-close" aria-label="Dismiss">✕</button>
+        </div>
+    {% endif %}
+
+    <div class="form-card">
+        <h1 class="form-title">Get in touch</h1>
+        <p class="form-subtitle">Send a message and we'll follow up. All submissions are saved in the database.</p>
+
+        <form method="post" action="/contact" novalidate>
+            <input type="hidden" name="_token" value="{{ csrf_token }}">
+
+            <div class="form-group">
+                <label class="form-label" for="email">Recipient email</label>
+                <input type="email" class="form-control" id="email" name="email"
+                       placeholder="recipient@example.com" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="subject">Subject</label>
+                <input type="text" class="form-control" id="subject" name="subject"
+                       placeholder="How can we help?" required maxlength="255">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="message">Message</label>
+                <textarea class="form-control" id="message" name="message"
+                          rows="6" required placeholder="Write your message here…"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:.25rem">
+                Send Message →
+            </button>
+        </form>
     </div>
-{% endif %}
 
-<form method="post" action="/contact">
-    <div class="mb-3">
-        <label for="email" class="form-label">To Email</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="recipient@example.com" required>
-    </div>
-
-    <div class="mb-3">
-        <label for="subject" class="form-label">Subject</label>
-        <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required>
-    </div>
-
-    <div class="mb-3">
-        <label for="message" class="form-label">Message</label>
-        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Send Email</button>
-</form>
+</div>
 {% endblock %}

@@ -2,30 +2,24 @@
 namespace App\Controller;
 
 use App\Database\Connection;
+use App\Model\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
-use App\Model\User;
 
-class UserController
+class UserController extends AbstractController
 {
-    private Environment $twig;
     private User $userModel;
 
-    public function __construct(Environment $twig)
+    public function __construct(\Twig\Environment $twig)
     {
-        $this->twig = $twig;
-        $conn = Connection::get();
-        $this->userModel = new User($conn);
+        parent::__construct($twig);
+        $this->userModel = new User(Connection::get());
     }
 
     public function list(Request $request): Response
     {
-        $users = $this->userModel->getAll(20);
-
-        $html = $this->twig->render('users.html.twig', [
-            'users' => $users
+        return $this->render('users.html.twig', [
+            'users' => $this->userModel->getAll(20),
         ]);
-        return new Response($html);
     }
 }

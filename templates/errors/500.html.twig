@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Server Error{% endblock %}
+{% block title %}Server Error — JarvishStack{% endblock %}
 
 {% block body %}
-<div class="container text-center mt-5">
-    <h1 class="display-1 text-warning">500</h1>
-    <h2 class="mb-4">Something went wrong.</h2>
-    <p class="mb-4">
-        {% if message is defined %}
+<div class="error-page">
+    <div class="error-code">500</div>
+    <h1 class="error-title">Something went wrong</h1>
+    <p class="error-desc">
+        {% if message is defined and message %}
             {{ message }}
         {% else %}
-            An unexpected error occurred. Please try again later.
+            An unexpected error occurred on the server. Please try again later.
         {% endif %}
     </p>
-    <a href="{{ asset('/') }}" class="btn btn-primary">Go to Home</a>
+    <a href="/" class="btn btn-primary btn-lg">← Back to Home</a>
 </div>
 {% endblock %}
