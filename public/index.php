@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../global.php';
 
+use App\Database\QueryBuilder;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,8 +40,8 @@ $twig->addFunction(new \Twig\TwigFunction('asset', function (string $path): stri
 $tablesReady = ['users' => false, 'contacts' => false];
 try {
     $conn = App\Database\Connection::get();
-    $tablesReady['users']    = (bool) $conn->query("SHOW TABLES LIKE 'users'")->num_rows;
-    $tablesReady['contacts'] = (bool) $conn->query("SHOW TABLES LIKE 'contact_us'")->num_rows;
+    $tablesReady['users']    = QueryBuilder::tableExists($conn, 'users');
+    $tablesReady['contacts'] = QueryBuilder::tableExists($conn, 'contact_us');
 } catch (\Throwable) {
     // DB unavailable — both flags stay false, links stay hidden
 }

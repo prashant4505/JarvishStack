@@ -2,6 +2,7 @@
 namespace App\Command;
 
 use App\Database\Connection;
+use App\Database\QueryBuilder;
 use DirectoryIterator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -94,18 +95,15 @@ class MigrateCommand extends Command
 
     private function getRanMigrations(\mysqli $conn): array
     {
-        $result = $conn->query("SELECT migration FROM migrations");
-        if (!$result) {
-            return [];
-        }
-        return array_column($result->fetch_all(MYSQLI_ASSOC), 'migration');
+        $rows = (new QueryBuilder($conn, 'migrations'))
+            ->select('migration')
+            ->get();
+        return array_column($rows, 'migration');
     }
 
     private function recordMigration(\mysqli $conn, string $className): void
     {
-        $stmt = $conn->prepare("INSERT IGNORE INTO migrations (migration) VALUES (?)");
-        $stmt->bind_param("s", $className);
-        $stmt->execute();
-        $stmt->close();
+        (new QueryBuilder($conn, 'migrations'))
+            ->insertOrIgnore(['migration' => $className]);
     }
 }
