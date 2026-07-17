@@ -48,7 +48,11 @@ abstract class AbstractController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        return isset($_SESSION['_csrf'][$action])
+        $valid = isset($_SESSION['_csrf'][$action])
             && hash_equals($_SESSION['_csrf'][$action], $token);
+
+        unset($_SESSION['_csrf'][$action]);
+
+        return $valid;
     }
 }
